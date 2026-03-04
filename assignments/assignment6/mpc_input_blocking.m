@@ -24,8 +24,10 @@ nx = size(A,1); % nx: number of states
 nu = size(B,2); % nu: number of controls
 ny = size(C,1); % ny: number of controls
 
+u_min = -1; u_max = 1;
+
 %% Problem 3a): Open-loop Optimization Problem
-[G_a, Aeq_a, beq_a, lb_a, ub_a] = build_qp_matrices(A, B, C, x0, Qt, Rt, N);
+[G_a, Aeq_a, beq_a, lb_a, ub_a] = build_qp_matrices(A, B, C, x0, Qt, Rt, N, u_min, u_max);
 
 z0_a = zeros(N*(nx+nu), 1); 
 
@@ -77,7 +79,7 @@ u_blocked_c = T_c * z_c(N*nx+1:end);
 plot_mpc_results(y_t_c, u_blocked_c, N, 'Problem 3c: Input Blocking (Varying Lengths)')
 
 %% Problem 3d): MPC Problem
-[G_d, Aeq_d, beq_d, lb_d, ub_d] = build_qp_matrices(A, B, C, x0, Qt, Rt, N);
+[G_d, Aeq_d, beq_d, lb_d, ub_d] = build_qp_matrices(A, B, C, x0, Qt, Rt, N, u_min, u_max);
 
 T_sim = 30;
 [x_t_d, u_t_d] = run_mpc_simulation(A, B, N, Aeq_d, G_d, T_sim, x0, nx, nu, lb_d, ub_d);

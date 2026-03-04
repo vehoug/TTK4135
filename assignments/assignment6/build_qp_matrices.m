@@ -1,4 +1,4 @@
-function [G, Aeq, beq, lb, ub] = build_qp_matrices(A, B, C, x0, Qy, Rt, N)
+function [G, Aeq, beq, lb, ub] = build_qp_matrices(A, B, C, x0, Qy, Rt, N, u_min, u_max)
     [nx, nu] = size(B);
     
     Qt = C' * Qy * C;
@@ -12,6 +12,6 @@ function [G, Aeq, beq, lb, ub] = build_qp_matrices(A, B, C, x0, Qy, Rt, N)
     Aeq = [Aeq_x, Aeq_u];
     beq = [A*x0; zeros((N-1)*nx, 1)];
    
-    lb = [-Inf(N*nx, 1); -ones(N*nu, 1)];
-    ub = [ Inf(N*nx, 1);  ones(N*nu, 1)];
+    lb = [-Inf(N*nx, 1); u_min * ones(N*nu, 1)];
+    ub = [ Inf(N*nx, 1); u_max * ones(N*nu, 1)];
 end
